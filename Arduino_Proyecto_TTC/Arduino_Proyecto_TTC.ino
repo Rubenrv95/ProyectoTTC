@@ -13,6 +13,8 @@ DHT dht(DHTPIN,DHTTYPE);
 #define luz6 28
 #define luz7 29
 #define luz8 30
+#define cerrado 51
+#define abierto 50
 
 //Variable LDR
 #define LDR  A0
@@ -20,6 +22,9 @@ int valorAnterior = 0;
 
 //
 #define luzP 31
+
+const int echoPin = 52;
+const int triggerPin =53;
 
 void setup() {
   Serial.begin(9600);
@@ -36,6 +41,13 @@ void setup() {
   pinMode(luz6, OUTPUT);
   pinMode(luz7, OUTPUT);
   pinMode(luz8, OUTPUT);
+  pinMode(triggerPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  pinMode(cerrado, OUTPUT);
+  pinMode(abierto, OUTPUT);
+  
+  digitalWrite(abierto, HIGH);
   
   pinMode(luzP, OUTPUT);
     Serial.println("Ingresa comando:");
@@ -49,8 +61,10 @@ void loop() {
   //delay(1000);
   //apagarLuces();
   //delay(1000);
+  detectarPersona();
   menu();
   obtenerLDR();
+  
 }
 
 void menu(){
@@ -117,10 +131,39 @@ void menu(){
     else if(opcion == "luces off"){
       apagarLuces();
     }
+    else if (opcion == "abrir") {
+      digitalWrite(abierto, HIGH);
+      digitalWrite(cerrado, LOW);
+      delay(100);
+    }
     else{
       Serial.println("Comando no reconocido");
     }
   }
+}
+
+void detectarPersona() {
+  delay(1000);
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+
+  long cm, duracion;
+  duracion = pulseIn(echoPin, HIGH);
+  cm = duracion / 29 / 2;
+
+  Serial.println(cm);
+  delay(100);
+
+  if (cm < 900) {
+    digitalWrite(abierto, LOW);
+    digitalWrite(cerrado, HIGH);
+  }
+  
+
+  
 }
 
 void prenderLuces(){
