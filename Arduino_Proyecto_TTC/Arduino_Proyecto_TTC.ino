@@ -15,6 +15,8 @@ DHT dht(DHTPIN,DHTTYPE);
 #define luz8 30
 #define cerrado 51
 #define abierto 50
+#define hume 32
+#define temp 33
 
 //Variable LDR
 #define LDR  A0
@@ -46,6 +48,9 @@ void setup() {
 
   pinMode(cerrado, OUTPUT);
   pinMode(abierto, OUTPUT);
+
+  pinMode(hume, OUTPUT);
+  pinMode(temp, OUTPUT);
   
   digitalWrite(abierto, HIGH);
   
@@ -61,10 +66,10 @@ void loop() {
   //delay(1000);
   //apagarLuces();
   //delay(1000);
-  detectarPersona();
-  menu();
+  //detectarPersona();
+  //menu();
+  checkTempHum();
   obtenerLDR();
-  
 }
 
 void menu(){
@@ -203,6 +208,7 @@ void obtenerHumedad(){
     Serial.println("Error al leer Humedad");
     return;
   }
+  if(h)
   Serial.println(h);
 }
 
@@ -217,5 +223,30 @@ void obtenerLDR(){
     else{
       digitalWrite(luzP,LOW);
     }
+  }
+}
+
+void checkTempHum(){
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  if( isnan(t)){
+    Serial.println("Error al leer");
+    return;
+  }
+  if( isnan(h)){
+    Serial.println("Error al leer");
+    return;
+  }
+  if(h<40 or h>60){
+    digitalWrite(hume,HIGH);
+  }
+  else{
+    digitalWrite(hume,LOW);
+  }
+  if(t<19 or t>25){
+    digitalWrite(temp,HIGH);
+  }
+  else{
+    digitalWrite(temp,LOW);
   }
 }
