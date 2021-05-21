@@ -1,3 +1,9 @@
+#include <SoftwareSerial.h>
+#include <string.h>
+int bluetoothTx = 0;
+int bluetoothRx = 1;
+SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
+
 //Variables Sensor Temperatura/Humedad
 #include "DHT.h"
 #define DHTTYPE DHT11
@@ -30,7 +36,7 @@ const int triggerPin =53;
 
 void setup() {
   Serial.begin(9600);
-
+  bluetooth.begin(9600);
   //Inicializa DHT22
   dht.begin();
   
@@ -55,7 +61,6 @@ void setup() {
   digitalWrite(abierto, HIGH);
   
   pinMode(luzP, OUTPUT);
-    Serial.println("Ingresa comando:");
 }
 
 void loop() {
@@ -67,7 +72,7 @@ void loop() {
   //apagarLuces();
   //delay(1000);
   //detectarPersona();
-  //menu();
+  menu();
   checkTempHum();
   obtenerLDR();
 }
@@ -76,53 +81,69 @@ void menu(){
   if (Serial.available()  ){
     String opcion = Serial.readString();
     opcion.trim();
-    if(opcion == "luz 1 on"){
+    if(opcion == "encender 1"){
       digitalWrite(luz1,HIGH);
+      Serial.println("Luz 1 Encendida");
     }
-    else if(opcion == "luz 1 off"){
+    else if(opcion == "Apagar uno"){
       digitalWrite(luz1,LOW);
+      Serial.println("Luz 1 Apagada");
     }
-    else if(opcion == "luz 2 on"){
+    else if(opcion == "encender 2"){
       digitalWrite(luz2,HIGH);
+      Serial.println("Luz 2 Encendida");
     }
-    else if(opcion == "luz 2 off"){
+    else if(opcion == "Apagar 2"){
       digitalWrite(luz2,LOW);
+      Serial.println("Luz 2 Apagada");
     }
-    else if(opcion == "luz 3 on"){
+    else if(opcion == "encender 3"){
       digitalWrite(luz3,HIGH);
+      Serial.println("Luz 3 Encendida");
     }
-    else if(opcion == "luz 3 off"){
+    else if(opcion == "lApagar 3"){
       digitalWrite(luz3,LOW);
+      Serial.println("Luz 3 Apagada");
     }
-    else if(opcion == "luz 4 on"){
+    else if(opcion == "encender 4"){
       digitalWrite(luz4,HIGH);
+      Serial.println("Luz 4 Encendida");
     }
-    else if(opcion == "luz 4 off"){
+    else if(opcion == "Apagar 4"){
       digitalWrite(luz4,LOW);
+      Serial.println("Luz 4 Apagada");
     }
-    else if(opcion == "luz 5 on"){
+    else if(opcion == "encender 5"){
       digitalWrite(luz5,HIGH);
+      Serial.println("Luz 5 Encendida");
     }
-    else if(opcion == "luz 5 off"){
+    else if(opcion == "Apagar 5"){
       digitalWrite(luz5,LOW);
+      Serial.println("Luz 5 Apagada");
     }
-    else if(opcion == "luz 6 on"){
+    else if(opcion == "encender 6"){
       digitalWrite(luz6,HIGH);
+      Serial.println("Luz 6 Encendida");
     }
-    else if(opcion == "luz 6 off"){
+    else if(opcion == "Apagar 6"){
       digitalWrite(luz6,LOW);
+      Serial.println("Luz 6 Apagada");
     }
-    else if(opcion == "luz 7 on"){
+    else if(opcion == "encender 7"){
       digitalWrite(luz7,HIGH);
+      Serial.println("Luz 7 Encendida");
     }
-    else if(opcion == "luz 7 off"){
+    else if(opcion == "Apagar 7"){
       digitalWrite(luz7,LOW);
+      Serial.println("Luz 7 Apagada");
     }
-    else if(opcion == "luz 8 on"){
+    else if(opcion == "encender 8"){
       digitalWrite(luz8,HIGH);
+      Serial.println("Luz 8 Encendida");
     }
-    else if(opcion == "luz 8 off"){
+    else if(opcion == "Apagar 8"){
       digitalWrite(luz8,LOW);
+      Serial.println("Luz 8 Apagada");
     }
     else if (opcion == "temperatura"){
       obtenerTemperatura();
@@ -130,10 +151,10 @@ void menu(){
     else if (opcion == "humedad"){
       obtenerHumedad();
     }
-    else if(opcion == "luces on"){
+    else if(opcion == "encender todas"){
       prenderLuces();
     }
-    else if(opcion == "luces off"){
+    else if(opcion == "Apagar todas"){
       apagarLuces();
     }
     else if (opcion == "abrir") {
