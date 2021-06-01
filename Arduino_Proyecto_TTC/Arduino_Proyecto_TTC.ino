@@ -71,7 +71,7 @@ void loop() {
   //delay(1000);
   //apagarLuces();
   //delay(1000);
-  //detectarPersona();
+  detectarPersona();
   menu();
   checkTempHum();
   obtenerLDR();
@@ -162,6 +162,11 @@ void menu(){
       digitalWrite(cerrado, LOW);
       delay(100);
     }
+    else if (opcion == "cerrar") {
+      digitalWrite(abierto, LOW);
+      digitalWrite(cerrado, HIGH);
+      delay(100);
+    }
     else{
       Serial.println("Comando no reconocido");
     }
@@ -180,16 +185,12 @@ void detectarPersona() {
   duracion = pulseIn(echoPin, HIGH);
   cm = duracion / 29 / 2;
 
-  Serial.println(cm);
   delay(100);
 
-  if (cm < 900) {
+  if (cm <= 90) {
     digitalWrite(abierto, LOW);
     digitalWrite(cerrado, HIGH);
   }
-  
-
-  
 }
 
 void prenderLuces(){
