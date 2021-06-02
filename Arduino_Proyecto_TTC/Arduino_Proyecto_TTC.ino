@@ -1,4 +1,5 @@
 #include <SoftwareSerial.h>
+#include<stdio.h>
 #include <string.h>
 int bluetoothTx = 0;
 int bluetoothRx = 1;
@@ -82,84 +83,10 @@ void loop() {
 void menu(){
   if (Serial.available()  ){
     String opcion = Serial.readString();
+    char opcion_char[50] = " ";
+    opcion.toCharArray(opcion_char, opcion.length() + 1);
     opcion.trim();
-    if(opcion == "encender 1"){
-      digitalWrite(luz1,HIGH);
-      Serial.println("Luz 1 Encendida");
-    }
-    else if(opcion == "Apagar uno"){
-      digitalWrite(luz1,LOW);
-      Serial.println("Luz 1 Apagada");
-    }
-    else if(opcion == "encender 2"){
-      digitalWrite(luz2,HIGH);
-      Serial.println("Luz 2 Encendida");
-    }
-    else if(opcion == "Apagar 2"){
-      digitalWrite(luz2,LOW);
-      Serial.println("Luz 2 Apagada");
-    }
-    else if(opcion == "encender 3"){
-      digitalWrite(luz3,HIGH);
-      Serial.println("Luz 3 Encendida");
-    }
-    else if(opcion == "lApagar 3"){
-      digitalWrite(luz3,LOW);
-      Serial.println("Luz 3 Apagada");
-    }
-    else if(opcion == "encender 4"){
-      digitalWrite(luz4,HIGH);
-      Serial.println("Luz 4 Encendida");
-    }
-    else if(opcion == "Apagar 4"){
-      digitalWrite(luz4,LOW);
-      Serial.println("Luz 4 Apagada");
-    }
-    else if(opcion == "encender 5"){
-      digitalWrite(luz5,HIGH);
-      Serial.println("Luz 5 Encendida");
-    }
-    else if(opcion == "Apagar 5"){
-      digitalWrite(luz5,LOW);
-      Serial.println("Luz 5 Apagada");
-    }
-    else if(opcion == "encender 6"){
-      digitalWrite(luz6,HIGH);
-      Serial.println("Luz 6 Encendida");
-    }
-    else if(opcion == "Apagar 6"){
-      digitalWrite(luz6,LOW);
-      Serial.println("Luz 6 Apagada");
-    }
-    else if(opcion == "encender 7"){
-      digitalWrite(luz7,HIGH);
-      Serial.println("Luz 7 Encendida");
-    }
-    else if(opcion == "Apagar 7"){
-      digitalWrite(luz7,LOW);
-      Serial.println("Luz 7 Apagada");
-    }
-    else if(opcion == "encender 8"){
-      digitalWrite(luz8,HIGH);
-      Serial.println("Luz 8 Encendida");
-    }
-    else if(opcion == "Apagar 8"){
-      digitalWrite(luz8,LOW);
-      Serial.println("Luz 8 Apagada");
-    }
-    else if (opcion == "temperatura"){
-      obtenerTemperatura();
-    }
-    else if (opcion == "humedad"){
-      obtenerHumedad();
-    }
-    else if(opcion == "encender todas"){
-      prenderLuces();
-    }
-    else if(opcion == "Apagar todas"){
-      apagarLuces();
-    }
-    else if (opcion == "abrir") {
+    if (opcion == "abrir") {
       digitalWrite(abierto, HIGH);
       digitalWrite(cerrado, LOW);
       delay(100);
@@ -168,6 +95,102 @@ void menu(){
       digitalWrite(abierto, LOW);
       digitalWrite(cerrado, HIGH);
       delay(100);
+    }
+   
+    else if(opcion == "encender todas"){
+      prenderLuces();
+      Serial.println("Luces encendidas");
+    }
+    else if(opcion == "Apagar todas"){
+      apagarLuces();
+      Serial.println("Luces apagadas");
+    }
+   char * token = strtok(opcion_char, " ");
+   if (strcmp(token, "encender")==0 || strcmp(token, "Apagar")==0) {
+      if (strcmp(token, "Apagar")==0) {
+        token = strtok(NULL, " ");
+        char * numeros = strtok(token, ""); 
+        for (int i=0; i<strlen(numeros); i++) {
+          if (numeros[i] == '1' || (numeros[0]=='u' && numeros[1]=='n' && numeros[2]=='o' && strlen(numeros)==3)) {
+            digitalWrite(luz1,LOW);
+            Serial.println("Luz 1 Apagada");
+          }
+          else if (numeros[i] == '2') {
+            digitalWrite(luz2,LOW);
+            Serial.println("Luz 2 Apagada");
+          }
+          else if (numeros[i] == '3') {
+            digitalWrite(luz3,LOW);
+            Serial.println("Luz 3 Apagada");
+          }
+          else if (numeros[i] == '4') {
+            digitalWrite(luz4,LOW);
+            Serial.println("Luz 4 Apagada");
+          }
+          else if (numeros[i] == '5') {
+            digitalWrite(luz5,LOW);
+            Serial.println("Luz 5 Apagada");
+          }
+          else if (numeros[i] == '6') {
+            digitalWrite(luz6,LOW);
+            Serial.println("Luz 6 Apagada");
+          }
+          else if (numeros[i] == '7') {
+            digitalWrite(luz7,LOW);
+            Serial.println("Luz 7 Apagada");
+          }
+          else if (numeros[i] == '8') {
+            digitalWrite(luz8,LOW);
+            Serial.println("Luz 8 Apagada");
+          }
+          else {
+            break;
+          }
+        }
+        
+      }
+      if (strcmp(token, "encender")==0) {
+        token = strtok(NULL, " ");
+        char * numeros = strtok(token, ""); 
+        for (int i=0; i<strlen(numeros); i++) {
+          if (numeros[i] == '1') {
+            digitalWrite(luz1,HIGH);
+            Serial.println("Luz 1 Encendida");
+          }
+          else if (numeros[i] == '2') {
+            digitalWrite(luz2,HIGH);
+            Serial.println("Luz 2 Encendida");
+          }
+          else if (numeros[i] == '3') {
+            digitalWrite(luz3,HIGH);
+            Serial.println("Luz 3 Encendida");
+          }
+          else if (numeros[i] == '4') {
+            digitalWrite(luz4,HIGH);
+            Serial.println("Luz 4 Encendida");
+          }
+          else if (numeros[i] == '5') {
+           digitalWrite(luz5,HIGH);
+            Serial.println("Luz 5 Encendida");
+          }
+          else if (numeros[i] == '6') {
+            digitalWrite(luz6,HIGH);
+            Serial.println("Luz 6 Encendida");
+          }
+          else if (numeros[i] == '7') {
+            digitalWrite(luz7,HIGH);
+            Serial.println("Luz 7 Encendida");
+          }
+          else if (numeros[i] == '8') {
+            digitalWrite(luz8,HIGH);
+            Serial.println("Luz 8 Encendida");
+          }
+          else {
+            break;
+          }
+        }
+        
+      }
     }
     else{
       Serial.println("Comando no reconocido");
