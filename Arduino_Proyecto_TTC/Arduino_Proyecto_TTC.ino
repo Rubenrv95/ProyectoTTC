@@ -23,6 +23,7 @@ DHT dht(DHTPIN,DHTTYPE);
 #define abierto 50
 #define hume 32
 #define temp 33
+#define persona 49
 
 //Variable LDR
 #define LDR  A0
@@ -52,6 +53,7 @@ void setup() {
   pinMode(triggerPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
+  pinMode(persona, OUTPUT);
   pinMode(cerrado, OUTPUT);
   pinMode(abierto, OUTPUT);
 
@@ -190,6 +192,12 @@ void detectarPersona() {
   if (cm <= 90) {
     digitalWrite(abierto, LOW);
     digitalWrite(cerrado, HIGH);
+  }
+  if (cm <= 5) {
+    digitalWrite(persona, HIGH);
+  }
+  else {
+    digitalWrite(persona, LOW);
   }
 }
 
