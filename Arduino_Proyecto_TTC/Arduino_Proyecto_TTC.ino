@@ -3,8 +3,11 @@
 #include <string.h>
 int bluetoothTx = 0;
 int bluetoothRx = 1;
-int lastH = 0;
-int lastT = 0;
+int lastH = 0; // ultima medicion de humedad
+int lastT = 0; // ultima medicion de temperatura
+int lastP = 0; // ultimo reconocimiento de persona en puerta
+int lastC = 1; // ultimo reconocimiento de cerradura
+
 SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
 
 //Variables Sensor Temperatura/Humedad
@@ -70,8 +73,9 @@ void setup() {
 
 void loop() {
   //prenderLuces();
-  obtenerTemperatura();
   //obtenerLDR();
+  obtenerTemperatura();
+  delay(100);
   obtenerHumedad();
   //delay(1000);
   //apagarLuces();
@@ -88,15 +92,14 @@ void menu(){
     char opcion_char[50] = " ";
     opcion.toCharArray(opcion_char, opcion.length() + 1);
     opcion.trim();
-    if (opcion == "abrir") {
+    if (opcion == "abrir puerta") {
       digitalWrite(abierto, HIGH);
       digitalWrite(cerrado, LOW);
-      delay(100);
-    }
-    else if (opcion == "cerrar") {
+      Serial.println("abrir puerta");
+      lastC = 1;
+      delay(3000);
       digitalWrite(abierto, LOW);
       digitalWrite(cerrado, HIGH);
-      delay(100);
     }
    
     else if(opcion == "encender todas"){
@@ -217,12 +220,33 @@ void detectarPersona() {
   if (cm <= 90) {
     digitalWrite(abierto, LOW);
     digitalWrite(cerrado, HIGH);
+    if (lastC != 0){
+      lastC = 0;
+      Serial.println("cerrar puerta");
+    }
   }
+  else{
+    digitalWrite(abierto, HIGH);
+    digitalWrite(cerrado, LOW);
+    if (lastC != 1){
+      lastC = 1;
+      Serial.println("abrir puerta");
+    }
+  }
+  delay(100);
   if (cm <= 5) {
     digitalWrite(persona, HIGH);
+    if (lastP != 1){
+      lastP = 1;
+      Serial.println("persona");
+    }
   }
   else {
     digitalWrite(persona, LOW);
+    if (lastP != 0){
+      lastP = 0;
+      Serial.println("nadie");
+    }
   }
 }
 
@@ -283,9 +307,11 @@ void obtenerLDR(){
     valorAnterior = valor;
     if(valorAnterior <= 100){
       digitalWrite(luzP,HIGH);
+      Serial.println("prender luz puerta");
     }
     else{
       digitalWrite(luzP,LOW);
+      Serial.println("apagar luz puerta");
     }
   }
 }
