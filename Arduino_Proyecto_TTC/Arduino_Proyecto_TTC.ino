@@ -2,6 +2,8 @@
 #include <string.h>
 int bluetoothTx = 0;
 int bluetoothRx = 1;
+int lastH = 0;
+int lastT = 0;
 SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
 
 //Variables Sensor Temperatura/Humedad
@@ -65,9 +67,9 @@ void setup() {
 
 void loop() {
   //prenderLuces();
-  //obtenerTemperatura();
+  obtenerTemperatura();
   //obtenerLDR();
-  //obtenerHumedad();
+  obtenerHumedad();
   //delay(1000);
   //apagarLuces();
   //delay(1000);
@@ -216,11 +218,16 @@ void apagarLuces(){
 
 void obtenerTemperatura(){
   float t = dht.readTemperature();
-  if( isnan(t)){
+  if(isnan(t)){
     Serial.println("Error al leer");
     return;
   }
-  Serial.println(t);
+  if(t!=lastT){
+    lastT = t;
+    String comm = "t ";
+    comm += t;
+    Serial.println(comm);
+  }
 }
 
 void obtenerHumedad(){
@@ -229,8 +236,12 @@ void obtenerHumedad(){
     Serial.println("Error al leer Humedad");
     return;
   }
-  if(h)
-  Serial.println(h);
+  if(h!=lastH){
+    lastH = h;
+    String comm = "h ";
+    comm += h;
+    Serial.println(comm);
+  }
 }
 
 void obtenerLDR(){
